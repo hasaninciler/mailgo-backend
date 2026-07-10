@@ -1,12 +1,21 @@
 const express = require('express');
 const sequelize = require('./config/database');
 const User = require('./models/User');
+require('./models');
 const authRoutes = require('./routes/auth');
+const cors = require('cors');
+const categoryRoutes = require('./routes/categories');
+const campaignRoutes = require('./routes/campaigns');
 
 const app = express();
 const PORT = 5001;
 
+app.use(cors());
 app.use(express.json());
+app.use('/api/campaigns', campaignRoutes);
+const subscriberRoutes = require('./routes/subscribers');
+app.use('/api/subscribers', subscriberRoutes);
+app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
