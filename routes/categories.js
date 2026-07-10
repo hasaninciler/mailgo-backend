@@ -25,7 +25,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// UPDATE - kategori güncelle
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;

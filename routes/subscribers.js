@@ -59,19 +59,16 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// CSV ile toplu subscriber import
 router.post('/import', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Dosya yüklenmedi' });
     }
 
-    // Dosyanın içeriğini metne çevir
     const csvText = req.file.buffer.toString('utf-8');
 
-    // CSV'yi satırlara/objelere çevir
     const records = parse(csvText, {
-      columns: true,        // ilk satır başlık olsun
+      columns: true,        
       skip_empty_lines: true,
       trim: true,
     });
@@ -82,7 +79,6 @@ router.post('/import', upload.single('file'), async (req, res) => {
     let skipped = 0;
     const errors = [];
 
-    // Her satır için subscriber oluştur
     for (const row of records) {
       if (!row.name || !row.email) {
         skipped++;
@@ -96,7 +92,6 @@ router.post('/import', upload.single('file'), async (req, res) => {
         });
         added++;
       } catch (err) {
-        // email zaten varsa atla
         skipped++;
         errors.push(`${row.email}: ${err.message}`);
       }
