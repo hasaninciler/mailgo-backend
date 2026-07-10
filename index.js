@@ -17,6 +17,8 @@ const subscriberRoutes = require('./routes/subscribers');
 app.use('/api/subscribers', subscriberRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', authRoutes);
+const analyticsRoutes = require('./routes/analytics');
+app.use('/api/analytics', analyticsRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'api aktif' });
