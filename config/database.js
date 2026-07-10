@@ -6,4 +6,4 @@ const sequelize = new Sequelize('mailgo', 'hasaninciler', '', {
   logging: false,
 });
 
-module.exports = sequelize;
+module.exports = sequelize; 
