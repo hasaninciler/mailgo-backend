@@ -1,24 +1,28 @@
 const express = require('express');
+const cors = require('cors');
 const sequelize = require('./config/database');
 const User = require('./models/User');
 require('./models');
+
 const authRoutes = require('./routes/auth');
-const cors = require('cors');
 const categoryRoutes = require('./routes/categories');
 const campaignRoutes = require('./routes/campaigns');
+const subscriberRoutes = require('./routes/subscribers');
+const analyticsRoutes = require('./routes/analytics');
+const authMiddleware = require('./middleware/auth');
 
 const app = express();
 const PORT = 5001;
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/campaigns', campaignRoutes);
-const subscriberRoutes = require('./routes/subscribers');
-app.use('/api/subscribers', subscriberRoutes);
-app.use('/api/categories', categoryRoutes);
+
 app.use('/api/auth', authRoutes);
-const analyticsRoutes = require('./routes/analytics');
-app.use('/api/analytics', analyticsRoutes);
+
+app.use('/api/campaigns', authMiddleware, campaignRoutes);
+app.use('/api/categories', authMiddleware, categoryRoutes);
+app.use('/api/subscribers', authMiddleware, subscriberRoutes);
+app.use('/api/analytics', authMiddleware, analyticsRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'api aktif' });
@@ -28,10 +32,10 @@ app.listen(PORT, async () => {
     console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor`);
     try {
         await sequelize.authenticate();
-        console.log('Veritabanı bağlantısı başarılı ✅');
+        console.log("database aktif");
         await sequelize.sync();
-        console.log('Tablolar senkronize edildi ✅');
+        console.log('tablolar sekronozie ediledi');
     } catch (error) {
-        console.error('Veritabanı bağlantı hatası ❌:', error.message);
+        console.error('database de hata var', error.message);
     }
 });
