@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      'bordo_io_test',
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 

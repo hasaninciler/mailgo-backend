@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/database');
 const User = require('./models/User');
+require('dotenv').config();
 require('./models');
 
 const authRoutes = require('./routes/auth');
